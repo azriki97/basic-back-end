@@ -9,7 +9,7 @@
 <body>
     <div class="container my-5">
         <h2>List of Clients</h2>
-        <a class="btn btn-primary" href="/Latihan1/create.php" role="button">New Client</a>
+        <a class="btn btn-primary" href="/backend/Latihan1/create.php" role="button">New Client</a>
         <br>
         <table class="table">
             <thead>
@@ -58,8 +58,8 @@
                             <td>$row[address]</td>
                             <td>$row[created_at]</td>
                             <td>
-                                <a class='btn btn-primary btn-sm' href='/Latihan1/edit.php?id= $row[id]'>Edit</a>
-                                <a class='btn btn-danger btn-sm' href='/Latihan1/delete.php?id= $row[id]'>Delete</a>
+                                <a class='btn btn-primary btn-sm' href='/backend/Latihan1/edit.php?id= $row[id]'>Edit</a>
+                                <a class='btn btn-danger btn-sm' href='/backend/Latihan1/delete.php?id= $row[id]'>Delete</a>
                             </td>
                         </tr>
                         ";

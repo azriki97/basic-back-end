@@ -6,48 +6,70 @@
 
     // Create connection
     $connection = new mysqli($servername, $username, $password, $database);
-    
+
+    $id = "";
     $name = "";
     $email = "";
     $phone = "";
     $address = "";
 
-    $errorMessage = "";
     $successMessage = "";
+    $errorMessage = "";
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER["REQUEST_METHOD"] == "GET") {
+        // GET Method show data client
+
+        if ( !isset($_GET["id"]) ) {
+            header("location: /backend/Latihan1/index.php");
+            exit;
+        }
+
+        $id = $_GET["id"];
+
+        // read row selected
+        $sql = "SELECT * FROM clients WHERE id = $id";
+        $result = $connection->query($sql);
+        $row = $result->fetch_assoc();
+
+        if ( !$row ) {
+            header("location: /backend/Latihan1/index.php");
+            exit;
+        }
+
+        $name = $row["name"];
+        $email = $row["email"];
+        $phone = $row["phone"];
+        $address = $row["address"];
+    }
+    else {
+        $id = $_POST["id"];
         $name = $_POST["name"];
         $email = $_POST["email"];
         $phone = $_POST["phone"];
         $address = $_POST["address"];
 
         do {
-            if( empty($name) || empty($email) || empty($phone) || empty($address) ){
+            if ( empty($id) || empty($name) || empty($email) || empty($phone) || empty($address) ) {
                 $errorMessage = "All the fields are required";
                 break;
             }
 
-            // Proses penambahan client baru
-            $sql = "INSERT INTO clients (name, email, phone, address) " . 
-                    "VALUES ('$name', '$email', '$phone', '$address')";
+            $sql = "UPDATE clients " . 
+                    "SET name = '$name', email = '$email', phone = '$phone', address = '$address' " . 
+                    "WHERE id = $id";
+
             $result = $connection->query($sql);
 
-            if(!$result){
-                $errorMessage = "Invalid query: " . $connection->error;
+            if (!$result) {
+                $errorMessage = "Invalid Query" . $connection->error;
                 break;
             }
 
-            $name = "";
-            $email = "";
-            $phone = "";
-            $address = "";
-
-            $successMessage = "Client added correctly";
-            
-            header("Location: /backend/Latihan1/index.php");
+            $successMessage = "Client updated correctly";
+            header("location: /backend/Latihan1/index.php");
             exit;
 
-        } while (false);
+        } while (true);
     }
 ?>
 
@@ -76,6 +98,7 @@
         ?>
 
         <form method="POST">
+            <input type="hidden" name="id" value="<?php echo $id; ?>">
             <div class="row mb-3">
                 <label class="col-sm-3 col-form-label">Name</label>
                 <div class="col-sm-6">
